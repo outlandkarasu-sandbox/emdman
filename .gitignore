@@ -1,0 +1,17 @@
+.dub
+docs.json
+__dummy.html
+docs/
+emdman.so
+emdman.dylib
+emdman.dll
+emdman.a
+emdman.lib
+emdman-test-*
+*.exe
+*.o
+*.obj
+*.lst
+.bash_history
+*.swp
+

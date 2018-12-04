@@ -1,0 +1,9 @@
+{
+	"name": "emdman",
+	"authors": [
+		"outland.karasu@gmail.com"
+	],
+	"description": "A minimal D application.",
+	"copyright": "Copyright © 2018, outland.karasu@gmail.com",
+	"license": "BSL-1.0"
+}
