@@ -14,5 +14,5 @@
 	"subConfigurations": {
 		"bindbc-sdl": "staticBC"
 	},
-	"postBuildCommands": ["emcc app.bc -s WASM=1 -s USE_SDL=2 -o app.html"]
+	"postBuildCommands": ["emcc app.bc -s WASM=1 -s USE_SDL=2 -s ENVIRONMENT=web -o dist/index.html"]
 }

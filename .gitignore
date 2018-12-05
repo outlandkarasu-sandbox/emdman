@@ -14,5 +14,5 @@ emdman-test-*
 *.lst
 .bash_history
 *.swp
-/app.*
+/app.bc
 
