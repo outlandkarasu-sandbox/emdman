@@ -14,5 +14,6 @@
 	"subConfigurations": {
 		"bindbc-sdl": "staticBC"
 	},
-	"postBuildCommands": ["emcc app.bc -s WASM=1 -s USE_SDL=2 -s ENVIRONMENT=web -o dist/index.html"]
+	"versions": ["BindSDL_Image"],
+	"postBuildCommands": ["emcc -v -O0 -s WASM=1 -s USE_SDL=2 -s USE_SDL_IMAGE=2 -s SDL2_IMAGE_FORMATS='[\"png\"]' -s ENVIRONMENT=web --embed-file images -o dist/index.html app.bc"]
 }
