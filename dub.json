@@ -3,7 +3,16 @@
 	"authors": [
 		"outland.karasu@gmail.com"
 	],
-	"description": "A minimal D application.",
+	"description": "A minimal emscripten D man demo.",
 	"copyright": "Copyright © 2018, outland.karasu@gmail.com",
-	"license": "BSL-1.0"
+	"license": "BSL-1.0",
+	"dflags-ldc": ["--output-bc", "-betterC"],
+	"targetName": "app.bc",
+	"dependencies": {
+		"bindbc-sdl": "~>0.4.1"
+	},
+	"subConfigurations": {
+		"bindbc-sdl": "staticBC"
+	},
+	"postBuildCommands": ["emcc app.bc -s WASM=1 -s USE_SDL=2 -o app.html"]
 }
