@@ -11,9 +11,8 @@ void logError(size_t line = __LINE__)() @nogc nothrow {
 }
 
 struct MainLoopArguments {
-    SDL_Window* window;
-    SDL_Surface* screen;
-    SDL_Surface* dman;
+    SDL_Renderer* renderer;
+    SDL_Texture* texture;
 }
 
 extern(C) int main(int argc, const char** argv) @nogc nothrow {
@@ -21,11 +20,13 @@ extern(C) int main(int argc, const char** argv) @nogc nothrow {
         logError();
         return -1;
     }
+    scope(exit) SDL_Quit();
 
     if(IMG_Init(IMG_INIT_PNG) != IMG_INIT_PNG) {
         logError();
         return -1;
     }
+    scope(exit) IMG_Quit();
 
     SDL_Window* window;
     SDL_Renderer* renderer;
@@ -33,30 +34,38 @@ extern(C) int main(int argc, const char** argv) @nogc nothrow {
         logError();
         return -1;
     }
+    scope(exit) {
+        SDL_DestroyRenderer(renderer);
+	SDL_DestroyWindow(window);
+    }
 
     auto dman = IMG_Load("images/dman.png");
     if(!dman) {
         logError();
         return -1;
     }
+    scope(exit) SDL_FreeSurface(dman);
 
     auto texture = SDL_CreateTextureFromSurface(renderer, dman);
     if(!texture) {
         logError();
         return -1;
     }
-    SDL_FreeSurface(dman);
+    scope(exit) SDL_DestroyTexture(texture);
 
+    auto arguments = MainLoopArguments(renderer, texture);
+    emscripten_set_main_loop_arg(&mainLoop, &arguments, 60, 1);
+    return 0;
+}
+
+extern(C) void mainLoop(void* p) @nogc nothrow {
+    auto arguments = cast(MainLoopArguments*) p;
+    auto renderer = arguments.renderer;
+    auto texture = arguments.texture;
     SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0x00);
     SDL_RenderClear(renderer);
     SDL_RenderCopy(renderer, texture, null, null);
     SDL_RenderPresent(renderer);
-
-    emscripten_set_main_loop_arg(&mainLoop, null, 0, 1);
-    return 0;
-}
-
-extern(C) void mainLoop(void* arguments) @nogc nothrow {
     emscripten_cancel_main_loop();
 }
 
